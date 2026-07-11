@@ -1,22 +1,24 @@
-import { Link } from "react-router-dom";
+import Button from "../components/ui/Button";
 
 const Home = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold text-white">
-          AI Applicant Tracking System
+    <section className="min-h-screen flex items-center justify-center px-6">
+      <div className="max-w-4xl text-center">
+        <h1 className="text-6xl font-bold leading-tight">
+          AI Powered
+          <span className="text-blue-600"> Applicant Tracking System</span>
         </h1>
 
-        <p className="text-gray-300 mt-5 text-lg">
-          Upload your resume and get AI-powered ATS analysis.
+        <p className="mt-6 text-gray-600 text-lg">
+          Upload your resume and receive an AI-powered ATS score, detailed
+          feedback, and suggestions to improve your chances of getting hired.
         </p>
 
-        <button className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
-          Get Started
-        </button>
+        <div className="mt-10">
+          <Button>Analyze Resume</Button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

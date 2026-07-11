@@ -2,17 +2,12 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "20px 40px",
-        borderBottom: "1px solid #ddd",
-      }}
-    >
-      <h2>AI ATS</h2>
+    <nav className="flex justify-between items-center px-8 py-5 shadow-md">
+      <Link to="/" className="text-2xl font-bold text-blue-600">
+        AI ATS
+      </Link>
 
-      <div style={{ display: "flex", gap: "20px" }}>
+      <div className="flex gap-8">
         <Link to="/">Home</Link>
         <Link to="/upload">Upload</Link>
         <Link to="/dashboard">Dashboard</Link>
