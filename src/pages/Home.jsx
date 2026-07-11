@@ -2,24 +2,20 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div>
-      <h1>AI Applicant Tracking System</h1>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <div className="text-center">
+        <h1 className="text-5xl font-bold text-white">
+          AI Applicant Tracking System
+        </h1>
 
-      <br />
+        <p className="text-gray-300 mt-5 text-lg">
+          Upload your resume and get AI-powered ATS analysis.
+        </p>
 
-      <Link to="/login">Login</Link>
-
-      <br />
-
-      <Link to="/upload">Upload Resume</Link>
-
-      <br />
-
-      <Link to="/dashboard">Dashboard</Link>
-
-      <br />
-
-      <Link to="/feedback">Feedback</Link>
+        <button className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+          Get Started
+        </button>
+      </div>
     </div>
   );
 };
