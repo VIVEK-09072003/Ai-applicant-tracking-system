@@ -1,9 +1,3 @@
-import React from 'react'
+import puter from "@heyputer/puter.js";
 
-const puter = () => {
-  return (
-    <div>puter</div>
-  )
-}
-
-export default puter
+export default puter;
