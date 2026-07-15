@@ -1,22 +1,37 @@
 import { useState } from "react";
 import AuthContext from "../context/AuthContext";
+import puter from "../lib/puter";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = () => {
-    console.log("Login will be implemented");
+  const login = async () => {
+    try {
+      await puter.auth.signIn();
+
+      const currentUser = await puter.auth.getUser();
+
+      setUser(currentUser);
+
+      console.log(currentUser);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
-  const logout = () => {
-    console.log("Logout will be implemented");
+  const logout = async () => {
+    try {
+      await puter.auth.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         login,
         logout,
       }}

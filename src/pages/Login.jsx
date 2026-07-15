@@ -1,9 +1,18 @@
-import React from 'react'
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
+  const { login } = useAuth();
 
-export default Login
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      <button
+        onClick={login}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+      >
+        Sign in with Puter
+      </button>
+    </div>
+  );
+};
+
+export default Login;
