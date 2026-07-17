@@ -1,36 +1,17 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import toast from "react-hot-toast";
-import { uploadResume } from "../../services/storage";
 
-const ResumeUploader = () => {
-  const [loading, setLoading] = useState(false);
+const ResumeUploader = ({ onFileSelect }) => {
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles[0];
+      if (!file) return;
 
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("File must be under 5MB");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const uploadedFile = await uploadResume(file);
-
-      console.log(uploadedFile);
-
-      toast.success("Resume uploaded successfully!");
-    } catch (error) {
-      console.error(error);
-      toast.error("Upload failed!");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      onFileSelect(file);
+    },
+    [onFileSelect]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -47,12 +28,10 @@ const ResumeUploader = () => {
     >
       <input {...getInputProps()} />
 
-      {loading ? (
-        <p>Uploading Resume...</p>
-      ) : isDragActive ? (
-        <p>Drop your resume here...</p>
+      {isDragActive ? (
+        <p>Drop Resume Here...</p>
       ) : (
-        <p>Drag & Drop your resume or click to upload</p>
+        <p>Drag & Drop Resume or Click</p>
       )}
     </div>
   );
