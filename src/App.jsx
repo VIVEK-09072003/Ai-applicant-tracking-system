@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import MainLayout from "./components/layout/MainLayout";
-import Feedback from "./pages/Feedback";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Upload from "./pages/Upload.jsx";
