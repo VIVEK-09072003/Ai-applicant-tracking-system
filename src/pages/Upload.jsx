@@ -9,39 +9,43 @@ const Upload = () => {
   const navigate = useNavigate();
 
   const handleAnalyze = async (file) => {
-  try {
-    // Convert PDF to images
-    const images = await convertPdfToImages(file);
+    try {
+      // Convert PDF to images
+      const images = await convertPdfToImages(file);
 
-    // Temporary Job Description
-    const jobDescription = "Frontend React Developer";
+      // Temporary Job Description
+      const jobDescription = "Frontend React Developer";
 
-    // AI Analysis
-    const response = await analyzeResume(images, jobDescription);
+      // AI Analysis
+      const response = await analyzeResume(images, jobDescription);
 
-    // AI returns JSON as string
-    const feedback = JSON.parse(response.message.content);
+      // AI returns JSON as string
+      const feedback = JSON.parse(response.message.content);
 
-    // Save analysis
-    await saveResumeAnalysis({
-      fileName: file.name,
-      score: feedback.score,
-      summary: feedback.summary,
-      strengths: feedback.strengths,
-      weaknesses: feedback.weaknesses,
-      suggestions: feedback.suggestions,
-      createdAt: new Date().toISOString(),
-    });
+      // Save analysis
+      await saveResumeAnalysis({
+        fileName: file.name,
+        score: feedback.score,
+        summary: feedback.summary,
+        strengths: feedback.strengths,
+        weaknesses: feedback.weaknesses,
+        suggestions: feedback.suggestions,
+        createdAt: new Date().toISOString(),
+      });
 
-    // Navigate to Feedback page
-    navigate("/feedback", {
-      state: feedback,
-    });
+      // Navigate to Feedback page
+      navigate("/feedback", {
+        state: {
+          fileName: file.name,
+          createdAt: new Date().toISOString(),
+          ...feedback,
+        },
+      });
 
-  } catch (error) {
-    console.error("Analysis Error:", error);
-  }
-};
+    } catch (error) {
+      console.error("Analysis Error:", error);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto py-20">

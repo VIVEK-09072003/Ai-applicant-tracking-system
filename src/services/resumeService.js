@@ -10,8 +10,8 @@ export async function saveResumeAnalysis(data) {
     );
 
     return fileName;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -26,14 +26,31 @@ export async function getResumeHistory() {
     const history = [];
 
     for (const file of jsonFiles) {
-      const text = await puter.fs.read(file.name);
+      const content = await puter.fs.read(file.name);
 
-      history.push(JSON.parse(text));
+      const resume = JSON.parse(content);
+
+      history.push({
+        id: file.name,
+        fileName: resume.fileName,
+        score: resume.score,
+        summary: resume.summary,
+        strengths: resume.strengths,
+        weaknesses: resume.weaknesses,
+        suggestions: resume.suggestions,
+        createdAt: resume.createdAt,
+      });
     }
 
+    history.sort(
+      (a, b) =>
+        new Date(b.createdAt) -
+        new Date(a.createdAt)
+    );
+
     return history;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return [];
   }
 }

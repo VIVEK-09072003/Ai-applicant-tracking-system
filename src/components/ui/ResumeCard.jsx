@@ -5,21 +5,31 @@ const ResumeCard = ({ resume }) => {
     <Link
       to="/feedback"
       state={resume}
-      className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition duration-300"
+      className="block bg-white rounded-xl shadow hover:shadow-lg transition p-6"
     >
-      <h2 className="text-xl font-semibold">
-        {resume.fileName}
-      </h2>
+      <div className="space-y-3">
 
-      <p className="mt-3 text-blue-600 font-bold">
-        ATS Score: {resume.score}/100
-      </p>
+        <h2 className="text-xl font-bold">
+          {resume.fileName}
+        </h2>
 
-      <p className="text-sm text-gray-500 mt-2">
-        {new Date(
-          resume.createdAt
-        ).toLocaleDateString()}
-      </p>
+        <p className="text-blue-600 font-semibold">
+          ATS Score : {resume.score}/100
+        </p>
+
+        <p className="text-gray-500 line-clamp-2">
+          {resume.summary}
+        </p>
+
+        <p className="text-sm text-gray-400">
+          {new Date(resume.createdAt).toLocaleString()}
+        </p>
+
+        <div className="pt-2 text-blue-600 font-semibold">
+          View Analysis →
+        </div>
+
+      </div>
     </Link>
   );
 };
