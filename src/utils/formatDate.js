@@ -1,9 +1,8 @@
-import React from 'react'
+export const formatDate = (isoString) => {
+  if (!isoString) return "";
 
-const formatDate = () => {
-  return (
-    <div>formatDate</div>
-  )
-}
-
-export default formatDate
+  return new Date(isoString).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+};

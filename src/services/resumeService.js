@@ -1,75 +1,69 @@
 import puter from "../lib/puter";
 
+const HISTORY_DIR = "resume-history";
+
+async function ensureHistoryDir() {
+  try {
+    await puter.fs.mkdir(HISTORY_DIR);
+  } catch (error) {
+    // Directory most likely already exists — safe to ignore.
+  }
+}
+
 export async function saveResumeAnalysis(data) {
   try {
-    const fileName = `resume-${Date.now()}.json`;
+    await ensureHistoryDir();
 
-    await puter.fs.write(
-      fileName,
-      JSON.stringify(data, null, 2)
-    );
+    const fileName = `${HISTORY_DIR}/resume-${Date.now()}.json`;
+
+    await puter.fs.write(fileName, JSON.stringify(data, null, 2));
 
     return fileName;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to save analysis:", error);
+    return null;
   }
 }
 
 export async function getResumeHistory() {
   try {
-    const files = await puter.fs.readdir("/");
+    await ensureHistoryDir();
 
-    const jsonFiles = files.filter(file =>
-      file.name.endsWith(".json")
+    const files = await puter.fs.readdir(HISTORY_DIR);
+    const jsonFiles = files.filter((file) => file.name.endsWith(".json"));
+
+    const history = await Promise.all(
+      jsonFiles.map(async (file) => {
+        const content = await puter.fs.read(file.path);
+        const text = typeof content.text === "function" ? await content.text() : content;
+        const resume = JSON.parse(text);
+
+        return {
+          id: file.name,
+          ...resume,
+        };
+      })
     );
 
-    const history = [];
-
-    for (const file of jsonFiles) {
-      const content = await puter.fs.read(file.name);
-
-      const resume = JSON.parse(content);
-
-      history.push({
-        id: file.name,
-        fileName: resume.fileName,
-        score: resume.score,
-        summary: resume.summary,
-        strengths: resume.strengths,
-        weaknesses: resume.weaknesses,
-        suggestions: resume.suggestions,
-        createdAt: resume.createdAt,
-      });
-    }
-
-    history.sort(
-      (a, b) =>
-        new Date(b.createdAt) -
-        new Date(a.createdAt)
-    );
+    history.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return history;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to load resume history:", error);
     return [];
   }
 }
 
 export async function wipeResumeHistory() {
   try {
-    const files = await puter.fs.readdir("/");
+    const files = await puter.fs.readdir(HISTORY_DIR);
+    const jsonFiles = files.filter((file) => file.name.endsWith(".json"));
 
-    const jsonFiles = files.filter(file =>
-      file.name.endsWith(".json")
-    );
-
-    for (const file of jsonFiles) {
-      await puter.fs.delete(file.name);
-    }
+    await Promise.all(jsonFiles.map((file) => puter.fs.delete(file.path)));
 
     return true;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to wipe resume history:", error);
     return false;
   }
 }

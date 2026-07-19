@@ -1,20 +1,51 @@
-<<<<<<< HEAD
-# React + Vite
+# AI ATS — AI-Powered Applicant Tracking System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Upload a resume (PDF), and get AI-scored feedback against a job description —
+score, summary, strengths, weaknesses, and suggestions — powered by
+[Puter.js](https://puter.com) (auth, AI, and file storage) with zero backend.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 18 + Vite
+- React Router v6
+- Tailwind CSS v4
+- Puter.js (`https://js.puter.com/v2/`) — auth, `puter.ai.chat`, `puter.fs`
+- `pdfjs-dist` — converts uploaded PDF pages to images for the AI to read
+- `react-dropzone`, `react-hot-toast`
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Ai-applicant-tracking-system
->>>>>>> 69cf22dfcbdef61f154bed46e43034a5e9a7a595
+```
+src/
+  components/
+    common/     Navbar, Footer, Loader, ProtectedRoute, ResumeUploader
+    feedback/   ScoreCard, SummaryCard, FeedbackSection, SectionTitle
+    layout/     MainLayout
+    ui/         Button, Badge, ResumeCard
+  constants/    routes.js
+  context/      AuthContext.jsx
+  hooks/        useAuth.js
+  lib/          puter.js (window.puter re-export)
+  pages/        Home, Login, Upload, Dashboard, Feedback, NotFound
+  providers/    AuthProvider.jsx
+  services/     ai.js, auth.js, pdf.js, resumeService.js
+  utils/        formatDate.js, calculateScore.js
+```
+
+## Notes / Assumptions
+
+- Puter's SDK is loaded via a `<script>` tag in `index.html`, not an npm
+  package — this is how Puter.js is meant to be used in the browser.
+- Resume analyses are saved as JSON files in `resume-history/` inside the
+  signed-in user's Puter cloud storage (`puter.fs`), so history is tied to
+  the logged-in account and persists across devices/refreshes.
+- `puter.fs.read()` may return a `Blob` in the browser SDK; `resumeService.js`
+  calls `.text()` on it when needed — double check this against your Puter
+  SDK version if reads fail.

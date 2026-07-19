@@ -1,9 +1,21 @@
-import React from 'react'
+import puter from "../lib/puter";
 
-const auth = () => {
-  return (
-    <div>auth</div>
-  )
-}
+export const signIn = async () => {
+  await puter.auth.signIn();
+  return puter.auth.getUser();
+};
 
-export default auth
+export const signOut = async () => {
+  await puter.auth.signOut();
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const isSignedIn = await puter.auth.isSignedIn();
+    if (!isSignedIn) return null;
+    return await puter.auth.getUser();
+  } catch (error) {
+    console.error("Auth check failed:", error);
+    return null;
+  }
+};
