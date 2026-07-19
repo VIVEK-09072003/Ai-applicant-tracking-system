@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ResumeCard from "../components/ui/ResumeCard";
 import Loader from "../components/common/Loader";
 
-import { getResumeHistory } from "../services/resumeService";
+import { getResumeHistory, wipeResumeHistory } from "../services/resumeService";
 
 const Home = () => {
   const [history, setHistory] = useState([]);
@@ -27,6 +27,17 @@ const Home = () => {
     return <Loader />;
   }
 
+  const handleWipeData = async () => {
+    const confirmed = window.confirm(
+      "Delete all saved resume analyses?"
+    );
+
+    if (!confirmed) return;
+
+    await wipeResumeHistory();
+    const data = await getResumeHistory();
+    setHistory([]);
+  };
   return (
     <div className="max-w-7xl mx-auto py-10 px-5">
 
@@ -35,6 +46,13 @@ const Home = () => {
         <h1 className="text-4xl font-bold">
           Previous Resume Analyses
         </h1>
+
+        <button
+          onClick={handleWipeData}
+          className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
+        >
+          Wipe App Data
+        </button>
 
       </div>
 

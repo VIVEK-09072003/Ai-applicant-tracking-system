@@ -1,9 +1,13 @@
-import React from 'react'
+import { getScoreMeta } from "../../utils/calculateScore";
 
-const Badge = () => {
+const Badge = ({ score }) => {
+  const { className } = getScoreMeta(score);
+
   return (
-    <div>Badge</div>
-  )
-}
+    <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap ${className}`}>
+      {score}/100
+    </span>
+  );
+};
 
-export default Badge
+export default Badge;

@@ -1,20 +1,19 @@
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import Loader from "./Loader";
 
-const Navbar = () => {
-  return (
-    <nav className="flex justify-between items-center px-8 py-5 shadow-md">
-      <Link to="/" className="text-2xl font-bold text-blue-600">
-        AI ATS
-      </Link>
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
 
-      <div className="flex gap-8">
-        <Link to="/">Home</Link>
-        <Link to="/upload">Upload</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/login">Login</Link>
-      </div>
-    </nav>
-  );
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
-export default Navbar;
+export default ProtectedRoute;

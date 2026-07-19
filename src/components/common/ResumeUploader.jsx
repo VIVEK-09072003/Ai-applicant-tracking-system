@@ -5,7 +5,6 @@ const ResumeUploader = ({ onFileSelect }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
-
       if (!file) return;
 
       onFileSelect(file);
@@ -24,14 +23,19 @@ const ResumeUploader = ({ onFileSelect }) => {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed border-gray-400 rounded-xl p-10 text-center cursor-pointer"
+      className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
+        isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
+      }`}
     >
       <input {...getInputProps()} />
 
       {isDragActive ? (
-        <p>Drop Resume Here...</p>
+        <p className="text-blue-600 font-medium">Drop resume here...</p>
       ) : (
-        <p>Drag & Drop Resume or Click</p>
+        <div className="space-y-2">
+          <p className="font-medium">Drag & drop your resume, or click to browse</p>
+          <p className="text-sm text-gray-400">PDF only</p>
+        </div>
       )}
     </div>
   );

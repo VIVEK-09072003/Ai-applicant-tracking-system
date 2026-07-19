@@ -54,3 +54,22 @@ export async function getResumeHistory() {
     return [];
   }
 }
+
+export async function wipeResumeHistory() {
+  try {
+    const files = await puter.fs.readdir("/");
+
+    const jsonFiles = files.filter(file =>
+      file.name.endsWith(".json")
+    );
+
+    for (const file of jsonFiles) {
+      await puter.fs.delete(file.name);
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
