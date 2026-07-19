@@ -1,86 +1,36 @@
-import { useEffect, useState } from "react";
-
-import ResumeCard from "../components/ui/ResumeCard";
-import Loader from "../components/common/Loader";
-
-import { getResumeHistory, wipeResumeHistory } from "../services/resumeService";
+import { Link } from "react-router-dom";
+import Button from "../components/ui/Button";
+import useAuth from "../hooks/useAuth";
+import { ROUTES } from "../constants/routes";
 
 const Home = () => {
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  const loadHistory = async () => {
-    setLoading(true);
-
-    const data = await getResumeHistory();
-
-    setHistory(data);
-
-    setLoading(false);
-  };
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  const handleWipeData = async () => {
-    const confirmed = window.confirm(
-      "Delete all saved resume analyses?"
-    );
-
-    if (!confirmed) return;
-
-    await wipeResumeHistory();
-    const data = await getResumeHistory();
-    setHistory([]);
-  };
   return (
-    <div className="max-w-7xl mx-auto py-10 px-5">
+    <div className="max-w-5xl mx-auto py-24 px-5 text-center space-y-8">
+      <h1 className="text-5xl font-extrabold leading-tight">
+        Land More Interviews with
+        <span className="text-blue-600"> AI-Powered Resume Feedback</span>
+      </h1>
 
-      <div className="flex justify-between items-center mb-8">
+      <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+        Upload your resume and let AI score it against a job description,
+        highlighting strengths, weaknesses, and concrete suggestions to
+        improve your ATS score.
+      </p>
 
-        <h1 className="text-4xl font-bold">
-          Previous Resume Analyses
-        </h1>
-
-        <button
-          onClick={handleWipeData}
-          className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg"
-        >
-          Wipe App Data
-        </button>
-
+      <div className="flex justify-center gap-4 flex-wrap">
+        <Link to={user ? ROUTES.UPLOAD : ROUTES.LOGIN}>
+          <Button className="text-lg px-8 py-4">
+            {user ? "Analyze a Resume" : "Get Started"}
+          </Button>
+        </Link>
+        <Link to={ROUTES.DASHBOARD}>
+          <Button className="text-lg px-8 py-4 bg-gray-200 !text-gray-800 hover:bg-gray-300">
+            View Dashboard
+          </Button>
+        </Link>
       </div>
-
-      {history.length === 0 ? (
-        <div className="bg-white rounded-xl shadow p-12 text-center">
-
-          <h2 className="text-2xl font-semibold">
-            No Resume Analyses Yet
-          </h2>
-
-          <p className="text-gray-500 mt-3">
-            Upload your first resume to begin.
-          </p>
-
-        </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {history.map((resume) => (
-            <ResumeCard
-              key={resume.id}
-              resume={resume}
-            />
-          ))}
-
-        </div>
-      )}
-
     </div>
   );
 };
